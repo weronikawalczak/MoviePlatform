@@ -1,5 +1,6 @@
 package com.example.demo.util;
 
+import com.example.demo.entity.Movie;
 import com.example.demo.model.*;
 import com.example.demo.model.external.OMDbMovie;
 import com.example.demo.model.external.OMDbRating;
@@ -16,6 +17,7 @@ public class Converter {
 
         movie.setTitle(omDbMovie.getTitle());
         movie.setYear(omDbMovie.getYear());
+        movie.setExternalID(omDbMovie.getImdbID());
 
         for (OMDbRating omDbRating: omDbMovie.getRatings()) {
             ratings.add(Rating.of(omDbRating));
@@ -32,6 +34,7 @@ public class Converter {
 
         movie.setTitle(theMovieMovie.getTitle());
         movie.setYear(theMovieMovie.getYear());
+        movie.setExternalID(theMovieMovie.getId());
 
         ratings.add(new Rating(theMovieMovie.sourceName, theMovieMovie.getVoteAverage()));
         movie.setRatings(ratings);

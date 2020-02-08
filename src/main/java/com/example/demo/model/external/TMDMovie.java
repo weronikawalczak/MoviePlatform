@@ -20,8 +20,11 @@ public class TMDMovie {
     @JsonAlias("vote_average")
     private String voteAverage;
 
+    private String id;
+
     public TMDMovie() {
     }
+
 
     @Override
     public String toString() {
@@ -29,6 +32,7 @@ public class TMDMovie {
                 "title='" + title + '\'' +
                 ", year='" + year + '\'' +
                 ", voteAverage='" + voteAverage + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 }

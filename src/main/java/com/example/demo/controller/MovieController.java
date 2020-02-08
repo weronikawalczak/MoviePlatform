@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Movie;
+import com.example.demo.entity.Movie;
 import com.example.demo.service.implementation.OMDbService;
 import com.example.demo.service.implementation.TMDService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +20,10 @@ public class MovieController {
     @GetMapping("/movie/{id}")
     public Movie getMovieById(@PathVariable(value="id") String id){
         return tmdService.getMovieById(id);
+    }
+
+    @GetMapping("/favourite/{userId}/{movieId}")
+    public Movie addMovieToFavourites(@PathVariable(value="userId") String userId, @PathVariable(value="movieId") String movieId){
+        return tmdService.addMovieToFavourites(userId, movieId);
     }
 }
