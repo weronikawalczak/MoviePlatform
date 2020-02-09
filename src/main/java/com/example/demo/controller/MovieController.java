@@ -6,7 +6,10 @@ import com.example.demo.service.implementation.TMDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class MovieController {
@@ -25,5 +28,10 @@ public class MovieController {
     @GetMapping("/favourite/{userId}/{movieId}")
     public Movie addMovieToFavourites(@PathVariable(value="userId") String userId, @PathVariable(value="movieId") String movieId){
         return tmdService.addMovieToFavourites(userId, movieId);
+    }
+
+    @GetMapping("/search")
+    public List<Movie> getMoviesByTitle(@RequestParam(value="title") String title){
+        return omDbService.getMoviesByTitle(title);
     }
 }

@@ -3,6 +3,7 @@ package com.example.demo.service.implementation;
 import com.example.demo.entity.Movie;
 import com.example.demo.entity.SystemUser;
 import com.example.demo.model.external.TMDMovie;
+import com.example.demo.model.external.TMDMovieSearch;
 import com.example.demo.repository.SystemMovieRepository;
 import com.example.demo.repository.SystemUserRepository;
 import com.example.demo.util.Util;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -43,6 +46,29 @@ public class TMDService implements MovieService {
         systemUserRepository.save(systemUser);
         return null;
     }
+
+    @Override
+    public List<Movie> getMoviesByTitle(String title) {
+        String url = "https://api.themoviedb.org/3/search/movie?api_key=" + Util.TheMovieApiKey + "&query=" + title;
+        System.out.println(url);
+
+        TMDMovieSearch response = restTemplate.getForObject(url, TMDMovieSearch.class);
+
+        List<Movie> movies = new ArrayList<>();
+
+        for (TMDMovie tmdMovie: response.getTmdMovies()) {
+            movies.add(Movie.of(tmdMovie));
+        }
+        return movies;
+    }
+
+
+
+    //        ResponseEntity<TMDMovie[]> response =
+//                restTemplate.getForEntity(url, TMDMovie[].class);
+//        TMDMovie[] tmdMovies = response.getBody();
+
+
 }
 
 
