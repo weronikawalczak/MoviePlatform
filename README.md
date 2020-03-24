@@ -1,1 +1,32 @@
 # MoviePlatform
+Aggregating movies platform for users votes. This system was created for my own purpose. With my daintiness with movies I have always checking the user votes in many platforms like polish Filmweb or IMDB. Basic funcionality of this system is connecting to external APIs.
+
+## Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
+* [Screenshots](#screenshots)
+* [Status](#status)
+* [Contact](#contact)
+
+## General info
+MoviePlatform:
+* 
+
+## Technologies
+* Java
+* Spring
+* Hibernate
+* 
+
+## Setup
+
+
+## Screenshots
+
+
+## Status
+Project is in progress.
+
+## Contact
+Created by [Weronika Walczak](mailto:weronikawalczak989@gmail.com) - feel free to contact me!
