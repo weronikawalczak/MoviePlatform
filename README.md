@@ -11,7 +11,10 @@ Aggregating movies platform for users votes. This system was created for my own 
 
 ## General info
 MoviePlatform:
-* 
+* Gives the user votes from many external APIs
+* The possibility to add your favourite movie
+* Saving your own vote 
+* Adding opinion about movies
 
 ## Technologies
 * Java
