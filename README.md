@@ -1,5 +1,5 @@
 # MoviePlatform
-Aggregating movies platform for users votes. This system was created for my own purpose. With my daintiness with movies I have always checking the user votes in many platforms like polish Filmweb or IMDB. Basic funcionality of this system is connecting to external APIs.
+Aggregating movies platform for users votes. This system was created for my own purpose. With my daintiness with movies I am  checking the user votes on many platforms like polish Filmweb or IMDB. Basic funcionality of this system is connection to external APIs.
 
 ## Table of contents
 * [General info](#general-info)
