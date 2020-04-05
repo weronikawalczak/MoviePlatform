@@ -20,6 +20,11 @@ public class MovieController {
     @Autowired
     private TMDService tmdService;
 
+    @GetMapping("/hello")
+    public String getDefault(){
+        return "Hello";
+    }
+
     @GetMapping("/movie/{id}")
     public Movie getMovieById(@PathVariable(value="id") String id){
         return tmdService.getMovieById(id);
