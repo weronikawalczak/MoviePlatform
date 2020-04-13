@@ -1,17 +1,26 @@
 package com.example.demo.entity;
 
-
+import com.example.demo.util.Role;
+import com.example.demo.util.State;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+//@Builder
 @Entity
 @Data
 public class SystemUser implements UserDetails {
+    public Long getId() {
+        return id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -21,12 +30,31 @@ public class SystemUser implements UserDetails {
 
     private String password;
 
+//    @Enumerated(EnumType.STRING)
+    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private State state;
+
     @OneToMany
-    private List<Movie> movies;
+    private List<Movie> favourites;
+
+    @OneToMany
+    private List<Movie> toWatch;
+
+    public SystemUser() {}
+
+    public SystemUser(String email,  String password){
+        this.email = email;
+        this.password = password;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+        list.add(new SimpleGrantedAuthority("ROLE_" + role));
+        return list;
     }
 
     @Override
@@ -46,7 +74,7 @@ public class SystemUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return state != State.BANNED;
     }
 
     @Override
@@ -56,6 +84,6 @@ public class SystemUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return state != State.INACTIVE;
     }
 }

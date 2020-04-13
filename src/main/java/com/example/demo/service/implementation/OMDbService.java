@@ -20,18 +20,18 @@ import java.util.Optional;
 
 @Service
 public class OMDbService implements MovieService {
+    private RestTemplate restTemplate;
+    private SystemUserRepository systemUserRepository;
+    private SystemMovieRepository systemMovieRepository;
 
-    @Autowired
-    RestTemplate restTemplate;
-
-    @Autowired
-    SystemUserRepository systemUserRepository;
-
-    @Autowired
-    SystemMovieRepository systemMovieRepository;
+    public OMDbService(RestTemplate restTemplate, SystemUserRepository systemUserRepository, SystemMovieRepository systemMovieRepository) {
+        this.restTemplate = restTemplate;
+        this.systemUserRepository = systemUserRepository;
+        this.systemMovieRepository = systemMovieRepository;
+    }
 
     @Override
-    public Movie getMovieById(String id){
+    public Movie getMovieById(Long id){
         String url = "http://www.omdbapi.com/?i=" + id + "&apikey=" + Util.OMDBApiKey;
         System.out.println(url);
         OMDbMovie omDbMovie = restTemplate.getForObject(url, OMDbMovie.class);
@@ -39,11 +39,11 @@ public class OMDbService implements MovieService {
     }
 
     @Override
-    public Movie addMovieToFavourites(String userId, String movieId) {
+    public Movie addMovieToFavourites(Long userId, Long movieId) {
         Movie movie = systemMovieRepository.save(getMovieById(movieId));
-        Optional<SystemUser> systemUserOptional = systemUserRepository.findById(Long.parseLong(userId));
+        Optional<SystemUser> systemUserOptional = systemUserRepository.findById(userId);
         SystemUser systemUser = systemUserOptional.get();
-        systemUser.getMovies().add(movie);
+        systemUser.getFavourites().add(movie);
         systemUserRepository.save(systemUser);
         return null;
     }
@@ -66,6 +66,13 @@ public class OMDbService implements MovieService {
         }
         return movies;
     }
+
+    @Override
+    public void addMovieToWatch(Long movieId, Long userId) {
+
+    }
+
+
 }
 
 

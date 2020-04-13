@@ -8,7 +8,6 @@ import com.example.demo.repository.SystemMovieRepository;
 import com.example.demo.repository.SystemUserRepository;
 import com.example.demo.util.Util;
 import com.example.demo.service.MovieService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,18 +18,18 @@ import java.util.Optional;
 
 @Service
 public class TMDService implements MovieService {
+    private RestTemplate restTemplate;
+    private SystemMovieRepository systemMovieRepository;
+    private SystemUserRepository systemUserRepository;
 
-    @Autowired
-    RestTemplate restTemplate;
-
-    @Autowired
-    SystemMovieRepository systemMovieRepository;
-
-    @Autowired
-    SystemUserRepository systemUserRepository;
+    public TMDService(RestTemplate restTemplate, SystemMovieRepository systemMovieRepository, SystemUserRepository systemUserRepository) {
+        this.restTemplate = restTemplate;
+        this.systemMovieRepository = systemMovieRepository;
+        this.systemUserRepository = systemUserRepository;
+    }
 
     @Override
-    public Movie getMovieById(String id) {
+    public Movie getMovieById(Long id) {
         String url = "https://api.themoviedb.org/3/movie/" + id + "?api_key=" + Util.TheMovieApiKey;
         System.out.println(url);
         TMDMovie tmdMovie = restTemplate.getForObject(url, TMDMovie.class);
@@ -38,11 +37,11 @@ public class TMDService implements MovieService {
     }
 
     @Override
-    public Movie addMovieToFavourites(String userId, String movieId) {
+    public Movie addMovieToFavourites(Long userId, Long movieId) {
         Movie movie = systemMovieRepository.save(getMovieById(movieId));
-        Optional<SystemUser> systemUserOptional = systemUserRepository.findById(Long.parseLong(userId));
+        Optional<SystemUser> systemUserOptional = systemUserRepository.findById(userId);
         SystemUser systemUser = systemUserOptional.get();
-        systemUser.getMovies().add(movie);
+        systemUser.getFavourites().add(movie);
         systemUserRepository.save(systemUser);
         return null;
     }
@@ -62,13 +61,19 @@ public class TMDService implements MovieService {
         return movies;
     }
 
+    @Override
+    public void addMovieToWatch(Long movieId, Long userId) {
+        try {
+            Movie movie = systemMovieRepository.save(getMovieById(movieId));
+            Optional<SystemUser> systemUserOptional = systemUserRepository.findById(userId);
+            SystemUser systemUser = systemUserOptional.get();
+            systemUser.getToWatch().add(movie);
+            systemUserRepository.save(systemUser);
+        }catch (Exception e){
+            //TODO Movie not found exception
 
-
-    //        ResponseEntity<TMDMovie[]> response =
-//                restTemplate.getForEntity(url, TMDMovie[].class);
-//        TMDMovie[] tmdMovies = response.getBody();
-
-
+        }
+    }
 }
 
 

@@ -21,17 +21,4 @@ public class App {
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
 	}
-
-//	@Bean
-//	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
-//		return args -> {
-//			Quote quote = restTemplate.getForObject(
-//					"https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
-//			System.out.println("myTest " + quote.toString());
-//			System.out.println("myTest " + quote.getType());
-//			System.out.println("myTest " + quote.getValue().getId());
-//			System.out.println("myTest " + quote.getValue().getQuote());
-//			log.info(quote.toString());
-//		};
-//	}
 }

@@ -1,42 +1,54 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Movie;
+import com.example.demo.entity.SystemUser;
 import com.example.demo.service.implementation.OMDbService;
 import com.example.demo.service.implementation.TMDService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
 public class MovieController {
-
-    @Autowired
     private OMDbService omDbService;
-
-    @Autowired
     private TMDService tmdService;
 
-    @GetMapping("/hello")
+    public MovieController(OMDbService omDbService, TMDService tmdService) {
+        this.omDbService = omDbService;
+        this.tmdService = tmdService;
+    }
+
+    @GetMapping
     public String getDefault(){
-        return "Hello";
+        return "Hello from MovieController";
+    }
+
+    @GetMapping("/unsecured")
+    public String getWithoutLogin(HttpSession session){
+        return "Hello UNSECURE";
     }
 
     @GetMapping("/movie/{id}")
-    public Movie getMovieById(@PathVariable(value="id") String id){
+    public Movie getMovieById(@PathVariable(value="id") Long id){
         return tmdService.getMovieById(id);
     }
 
-    @GetMapping("/favourite/{userId}/{movieId}")
-    public Movie addMovieToFavourites(@PathVariable(value="userId") String userId, @PathVariable(value="movieId") String movieId){
-        return tmdService.addMovieToFavourites(userId, movieId);
+    @GetMapping("/favourite/{movieId}")
+    public Movie addMovieToFavourites(@PathVariable(value="movieId") Long movieId){
+        SystemUser systemUser = (SystemUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return tmdService.addMovieToFavourites(systemUser.getId(), movieId);
     }
 
     @GetMapping("/search")
     public List<Movie> getMoviesByTitle(@RequestParam(value="title") String title){
         return omDbService.getMoviesByTitle(title);
+    }
+
+    @PostMapping("/towatch/{movieId}")
+    public void addMovieToWatch(@PathVariable(value="movieId") Long movieId){
+        SystemUser systemUser = (SystemUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        tmdService.addMovieToWatch(movieId, systemUser.getId());
     }
 }

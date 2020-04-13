@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Configuration
 @EnableWebSecurity
@@ -29,8 +30,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authorizeRequests()
-                    .antMatchers(HttpMethod.GET, "/hello").permitAll()
+                    .antMatchers(HttpMethod.GET, "/unsecured").permitAll()
+                    .antMatchers(HttpMethod.GET, "/movie/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/favourite/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/towatch/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/admin/ban/**").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.POST, "/register").hasRole("ADMIN")
                 .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .logout()
                 .and()
                 .httpBasic();
     }
